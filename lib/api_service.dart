@@ -16,7 +16,7 @@ class ApiService {
     String password,
   ) async {
     try {
-      var url = 'http://localhost:3000/medico/create';
+      var url = 'https://easemedapi.onrender.com/medico/create';
       var headers = {'Content-Type': 'application/json'};
       var body = json.encode({
         'nombres': nombres,
@@ -57,7 +57,7 @@ class ApiService {
 
   Future<int?> login(String username, String password) async {
     try {
-      final url = 'http://localhost:3000/medico/login';
+      final url = 'https://easemedapi.onrender.com/medico/login';
       final headers = {'Content-Type': 'application/json'};
       final body = jsonEncode({
         'username': username,
@@ -111,7 +111,7 @@ class ApiService {
 
   Future<List<Doctor>> getMedicos() async {
     try {
-      var url = 'http://localhost:3000/medico';
+      var url = 'https://easemedapi.onrender.com/medico';
       var headers = {'Content-Type': 'application/json'};
 
       var response = await HttpRequest.request(
@@ -142,10 +142,9 @@ class ApiService {
     }
   }
 
-  // Método para obtener la lista de citas desde la API
   Future<List<Cita>> getCitas() async {
     try {
-      var url = 'http://localhost:3000/cita';
+      var url = 'https://easemedapi.onrender.com/cita';
       var headers = {'Content-Type': 'application/json'};
 
       var response = await HttpRequest.request(
@@ -174,7 +173,7 @@ class ApiService {
   Future<List<Cita>> getCitasByDoctor(int doctorId) async {
     try {
       var url =
-          'http://localhost:3000/cita/medico?id_medico=$doctorId'; // Add doctor ID to query parameter
+          'https://easemedapi.onrender.com/cita/medico?id_medico=$doctorId'; // Add doctor ID to query parameter
       var headers = {'Content-Type': 'application/json'};
 
       var response = await HttpRequest.request(
@@ -203,7 +202,7 @@ class ApiService {
   Future<void> deleteCita(int citaId) async {
     try {
       var url =
-          'http://localhost:3000/cita/$citaId'; // Reemplaza $citaId con el ID de la cita que deseas eliminar
+          'https://easemedapi.onrender.com/cita/$citaId'; // Reemplaza $citaId con el ID de la cita que deseas eliminar
       var headers = {'Content-Type': 'application/json'};
 
       var response = await HttpRequest.request(
@@ -223,39 +222,9 @@ class ApiService {
     }
   }
 
-  Future<List<Doctor>> getmedicologin() async {
-    try {
-      var url = 'http://localhost:3000/medico/login';
-      var headers = {'Content-Type': 'application/json'};
-
-      var response = await HttpRequest.request(url,
-          method: 'GET', requestHeaders: headers);
-
-      if (response.status == 200) {
-        // Verificar que response.responseText no sea nulo
-        if (response.responseText != null) {
-          // Decodificar la respuesta JSON a una lista de mapas
-          List<dynamic> jsonResponse = jsonDecode(response.responseText!);
-
-          // Convertir cada mapa en un objeto Doctor y almacenarlo en una lista
-          List<Doctor> doctors =
-              jsonResponse.map((json) => Doctor.fromJson(json)).toList();
-
-          return doctors;
-        } else {
-          throw Exception('La respuesta está vacía');
-        }
-      } else {
-        throw Exception('Error en la respuesta');
-      }
-    } catch (e) {
-      throw Exception('Error en la solicitud GET:$e');
-    }
-  }
-
   Future<List<Consulta>> getConsultasById(int id) async {
     try {
-      var url = 'http://localhost:3000/getConsultasById?id=$id';
+      var url = 'https://easemedapi.onrender.com/getConsultasById?id=$id';
       var headers = {'Content-Type': 'application/json'};
 
       var response = await HttpRequest.request(url,
@@ -288,7 +257,7 @@ class ApiService {
     String observaciones,
   ) async {
     try {
-      var url = 'http://localhost:3000/createConsulta';
+      var url = 'https://easemedapi.onrender.com/createConsulta';
       var headers = {'Content-Type': 'application/json'};
       var body = json.encode({
         'id_cita': idCita,

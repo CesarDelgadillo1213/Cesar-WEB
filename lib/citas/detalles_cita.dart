@@ -131,7 +131,7 @@ class DetallesCita extends StatelessWidget {
             const Divider(thickness: 1.0),
 
             // Doctor section with conditional presence, clear label, and divider
-            if (cita.nombreMedico != null && cita.nombreMedico!.isNotEmpty) ...[
+            if (cita.nombreMedico.isNotEmpty) ...[
               Text(
                 'Médico:',
                 style: TextStyle(
@@ -283,7 +283,7 @@ class DetallesCita extends StatelessWidget {
             const Divider(thickness: 1.0),
 
             // Doctor section with conditional presence, clear label, and divider
-            if (cita.nombreMedico != null && cita.nombreMedico!.isNotEmpty) ...[
+            if (cita.nombreMedico.isNotEmpty) ...[
               Text(
                 'Médico:',
                 style: TextStyle(
