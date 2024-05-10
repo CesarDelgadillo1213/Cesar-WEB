@@ -56,9 +56,8 @@ class _VerCitasState extends State<VerCitas> {
             .contains(searchText.toLowerCase());
         // Filtrar por nombre del médico (ignorando mayúsculas/minúsculas)
         bool medicoMatches = cita.nombreMedico
-                ?.toLowerCase()
-                .contains(searchText.toLowerCase()) ??
-            false;
+                .toLowerCase()
+                .contains(searchText.toLowerCase());
         // Retornar verdadero si al menos una de las condiciones coincide
         return idMatches || pacienteMatches || medicoMatches;
       }).toList();
@@ -172,7 +171,7 @@ class CitaCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (cita.nombreMedico != null && cita.nombreMedico!.isNotEmpty)
+                if (cita.nombreMedico.isNotEmpty)
                   Column(
                     children: [
                       SizedBox(height: 7),

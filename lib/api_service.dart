@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:login_web/doctor/doctor.dart';
 import 'package:login_web/citas/cita.dart';
+import 'package:login_web/historial/Consulta.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Asegúrate de importar la clase Cita si existe
 
 class ApiService {
@@ -54,58 +55,60 @@ class ApiService {
     }
   }
 
- Future<int?> login(String username, String password) async {
-  try {
-    final url = 'http://localhost:3000/medico/login';
-    final headers = {'Content-Type': 'application/json'};
-    final body = jsonEncode({
-      'username': username,
-      'password': password,
-    });
+  Future<int?> login(String username, String password) async {
+    try {
+      final url = 'http://localhost:3000/medico/login';
+      final headers = {'Content-Type': 'application/json'};
+      final body = jsonEncode({
+        'username': username,
+        'password': password,
+      });
 
-    final response = await HttpRequest.request(url,
-        method: 'POST', requestHeaders: headers, sendData: body);
+      final response = await HttpRequest.request(url,
+          method: 'POST', requestHeaders: headers, sendData: body);
 
-    if (response.status == 200) {
-      if (response.responseText != null) {
-        try {
-          final jsonResponse = jsonDecode(response.responseText!);
-          final userId = jsonResponse['id'] as int?;
+      if (response.status == 200) {
+        if (response.responseText != null) {
+          try {
+            final jsonResponse = jsonDecode(response.responseText!);
+            final userId = jsonResponse['id'] as int?;
 
-          if (userId != null) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setInt('userId', userId);
-            print('ID de usuario guardado en las preferencias compartidas: $userId');
-          } else {
-            print('Error: ID de usuario nulo en la respuesta JSON');
+            if (userId != null) {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setInt('userId', userId);
+              print(
+                  'ID de usuario guardado en las preferencias compartidas: $userId');
+            } else {
+              print('Error: ID de usuario nulo en la respuesta JSON');
+            }
+
+            // Aquí puedes procesar el cuerpo de la respuesta según necesites
+
+            return response.status; // Devuelve el estado de la respuesta
+          } catch (e) {
+            print('Error al decodificar la respuesta JSON: $e');
           }
-
-          // Aquí puedes procesar el cuerpo de la respuesta según necesites
-
-          return response.status; // Devuelve el estado de la respuesta
-        } catch (e) {
-          print('Error al decodificar la respuesta JSON: $e');
+        } else {
+          print('La respuesta está vacía');
         }
       } else {
-        print('La respuesta está vacía');
-      }
-    } else {
-      print('Error en la respuesta:');
-      print('Código de estado: ${response.status}');
-      print('Mensaje: ${response.statusText}');
+        print('Error en la respuesta:');
+        print('Código de estado: ${response.status}');
+        print('Mensaje: ${response.statusText}');
 
-      if (response.status == 404) {
-        print('Error en la respuesta: Credenciales inválidas');
+        if (response.status == 404) {
+          print('Error en la respuesta: Credenciales inválidas');
+        }
       }
+
+      return response.status; // Devuelve el estado de la respuesta
+    } catch (e) {
+      print('Error en la solicitud:');
+      print(e);
+      return -1; // Devuelve -1 en caso de error
     }
-
-    return response.status; // Devuelve el estado de la respuesta
-  } catch (e) {
-    print('Error en la solicitud:');
-    print(e);
-    return -1; // Devuelve -1 en caso de error
   }
-}
+
   Future<List<Doctor>> getMedicos() async {
     try {
       var url = 'http://localhost:3000/medico';
@@ -170,7 +173,8 @@ class ApiService {
 
   Future<List<Cita>> getCitasByDoctor(int doctorId) async {
     try {
-      var url = 'http://localhost:3000/cita/medico?id_medico=$doctorId'; // Add doctor ID to query parameter
+      var url =
+          'http://localhost:3000/cita/medico?id_medico=$doctorId'; // Add doctor ID to query parameter
       var headers = {'Content-Type': 'application/json'};
 
       var response = await HttpRequest.request(
@@ -196,36 +200,36 @@ class ApiService {
     }
   }
 
-  
   Future<void> deleteCita(int citaId) async {
-  try {
-    var url = 'http://localhost:3000/cita/$citaId'; // Reemplaza $citaId con el ID de la cita que deseas eliminar
-    var headers = {'Content-Type': 'application/json'};
+    try {
+      var url =
+          'http://localhost:3000/cita/$citaId'; // Reemplaza $citaId con el ID de la cita que deseas eliminar
+      var headers = {'Content-Type': 'application/json'};
 
-    var response = await HttpRequest.request(
-      url,
-      method: 'DELETE',
-      requestHeaders: headers,
-    );
+      var response = await HttpRequest.request(
+        url,
+        method: 'DELETE',
+        requestHeaders: headers,
+      );
 
-    if (response.status == 200 || response.status == 204) {
-      // La solicitud DELETE fue exitosa
-      print('Cita eliminada correctamente');
-    } else {
-      throw Exception('Error en la respuesta: ${response.statusText}');
+      if (response.status == 200 || response.status == 204) {
+        // La solicitud DELETE fue exitosa
+        print('Cita eliminada correctamente');
+      } else {
+        throw Exception('Error en la respuesta: ${response.statusText}');
+      }
+    } catch (e) {
+      throw Exception('Error en la solicitud DELETE: $e');
     }
-  } catch (e) {
-    throw Exception('Error en la solicitud DELETE: $e');
   }
-}
 
   Future<List<Doctor>> getmedicologin() async {
     try {
       var url = 'http://localhost:3000/medico/login';
       var headers = {'Content-Type': 'application/json'};
 
-      var response = await HttpRequest.request(
-          url, method: 'GET', requestHeaders: headers);
+      var response = await HttpRequest.request(url,
+          method: 'GET', requestHeaders: headers);
 
       if (response.status == 200) {
         // Verificar que response.responseText no sea nulo
@@ -246,6 +250,81 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Error en la solicitud GET:$e');
+    }
+  }
+
+  Future<List<Consulta>> getConsultasById(int id) async {
+    try {
+      var url = 'http://localhost:3000/getConsultasById?id=$id';
+      var headers = {'Content-Type': 'application/json'};
+
+      var response = await HttpRequest.request(url,
+          method: 'GET', requestHeaders: headers);
+
+      if (response.status == 200) {
+        if (response.responseText != null) {
+          List<dynamic> jsonResponse = jsonDecode(response.responseText!);
+
+          // Mapear la lista de consultas JSON a objetos Consulta
+          List<Consulta> consultas =
+              jsonResponse.map((data) => Consulta.fromJson(data)).toList();
+
+          return consultas;
+        } else {
+          throw Exception('La respuesta está vacía');
+        }
+      } else {
+        throw Exception('Error en la respuesta: ${response.statusText}');
+      }
+    } catch (e) {
+      throw Exception('Error en la solicitud GET: $e');
+    }
+  }
+
+  Future<int?> createConsulta(
+    int idCita,
+    String diagnostico,
+    String recetaMedica,
+    String observaciones,
+  ) async {
+    try {
+      var url = 'http://localhost:3000/createConsulta';
+      var headers = {'Content-Type': 'application/json'};
+      var body = json.encode({
+        'id_cita': idCita,
+        'diagnostico': diagnostico,
+        'receta_medica': recetaMedica,
+        'observaciones': observaciones,
+      });
+
+      print('Enviando solicitud HTTP (POST)...');
+
+      var response = await HttpRequest.request(
+        url,
+        method: 'POST',
+        requestHeaders: headers,
+        sendData: body,
+      );
+
+      print('Solicitud completada con éxito.');
+
+      if (response.status == 201) {
+        // Verificar si la solicitud fue exitosa (código de estado 201)
+        print('Código de estado 201 - Éxito:');
+        print(response.responseText);
+        // Aquí puedes procesar el cuerpo de la respuesta según necesites
+      } else {
+        // Manejar otros códigos de estado según sea necesario
+        print('Error en la respuesta:');
+        print('Código de estado: ${response.status}');
+        print('Mensaje: ${response.statusText}');
+      }
+
+      return response.status; // Devuelve el estado de la respuesta
+    } catch (e) {
+      print('Error en la solicitud:');
+      print(e);
+      return -1; // Devuelve -1 en caso de error
     }
   }
 }

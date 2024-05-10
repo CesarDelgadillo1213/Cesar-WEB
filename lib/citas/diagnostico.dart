@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../api_service.dart';
+
 class DiagnosticoPage extends StatefulWidget {
   final int idCita;
 
@@ -90,8 +92,8 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
                         },
                         child: Text('Agregar Diagnóstico'),
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.deepPurple),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.deepPurple),
                           foregroundColor:
                               MaterialStateProperty.all<Color>(Colors.white),
                         ),
@@ -108,7 +110,7 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
     );
   }
 
-  void _guardarDiagnostico() {
+  void _guardarDiagnostico() async {
   // Obtener los valores de los campos
   String diagnostico = _diagnosticoController.text;
   String recetaMedica = _recetaMedicaController.text;
@@ -134,24 +136,50 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
   print('Receta Médica: $recetaMedica');
   print('Observaciones: $observaciones');
 
-  // Muestra un toast de éxito al agregar el diagnóstico
-  Fluttertoast.showToast(
-    msg: 'Diagnóstico agregado exitosamente.',
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 1,
-    backgroundColor: Colors.green,
-    textColor: Colors.white,
-    fontSize: 16.0,
-  );
+  try {
+    // Envía la solicitud para crear la consulta
+    int? statusCode = await ApiService().createConsulta(
+      widget.idCita,
+      diagnostico,
+      recetaMedica,
+      observaciones,
+    );
 
-  // Limpiar los campos después de imprimir en la consola
-  _diagnosticoController.clear();
-  _recetaMedicaController.clear();
-  _observacionesController.clear();
+    // Verifica el estado de la respuesta
+    if (statusCode == 201) {
+      // Muestra un toast de éxito al agregar el diagnóstico
+      Fluttertoast.showToast(
+        msg: 'Diagnóstico agregado exitosamente.',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
 
-  // Regresar a la pantalla anterior
-  Navigator.pop(context);
+      // Limpiar los campos después de imprimir en la consola
+      _diagnosticoController.clear();
+      _recetaMedicaController.clear();
+      _observacionesController.clear();
+
+      // Regresar a la pantalla anterior
+      Navigator.pop(context);
+    } else {
+      // Manejar otros estados de respuesta según sea necesario
+      Fluttertoast.showToast(
+        msg: 'Error al agregar el diagnóstico. Código de estado: $statusCode',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  } catch (e) {
+    print('Error al enviar la solicitud: $e');
+    // Manejar errores de solicitud
+  }
 }
-
 }

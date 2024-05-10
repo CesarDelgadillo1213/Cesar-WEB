@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_web/citas/diagnostico.dart';
-import 'package:login_web/citas/historial.dart';
+import 'package:login_web/historial/consultas_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:login_web/api_service.dart';
 import 'package:login_web/citas/cita.dart';
@@ -311,7 +311,7 @@ class DetallesCita extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HistorialMedicoPacienteScreen(idPaciente: cita.idPaciente),
+        builder: (context) => ConsultasPage(idPaciente: cita.idPaciente),
       ),
     );
   },
