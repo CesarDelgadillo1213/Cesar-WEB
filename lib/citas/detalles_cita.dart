@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:login_web/citas/diagnostico.dart';
+import 'package:login_web/historial/consultas_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:login_web/api_service.dart';
 import 'package:login_web/citas/cita.dart';
-import 'package:login_web/citas/ver_citas.dart'; // Importa la pantalla de VerCitas
+import 'package:login_web/citas/ver_citas.dart'; 
 
 class DetallesCita extends StatelessWidget {
   final Cita cita;
@@ -41,7 +43,7 @@ class DetallesCita extends StatelessWidget {
           'Detalles de la cita',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color.fromARGB(255, 148, 27, 27),
+        backgroundColor: Colors.blueGrey,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -129,7 +131,7 @@ class DetallesCita extends StatelessWidget {
             const Divider(thickness: 1.0),
 
             // Doctor section with conditional presence, clear label, and divider
-            if (cita.nombreMedico != null && cita.nombreMedico!.isNotEmpty) ...[
+            if (cita.nombreMedico.isNotEmpty) ...[
               Text(
                 'Médico:',
                 style: TextStyle(
@@ -281,7 +283,7 @@ class DetallesCita extends StatelessWidget {
             const Divider(thickness: 1.0),
 
             // Doctor section with conditional presence, clear label, and divider
-            if (cita.nombreMedico != null && cita.nombreMedico!.isNotEmpty) ...[
+            if (cita.nombreMedico.isNotEmpty) ...[
               Text(
                 'Médico:',
                 style: TextStyle(
@@ -304,16 +306,29 @@ class DetallesCita extends StatelessWidget {
                   .spaceBetween, // Align buttons to opposite ends
               children: [
                 // View history button
-                ElevatedButton(
-                  onPressed: () {
-                    // Lógica para ver el historial médico
-                  },
-                  child: Text('Ver historial médico'),
-                ),
+          ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConsultasPage(idPaciente: cita.idPaciente),
+      ),
+    );
+  },
+  child: Text('Ver historial médico'),
+),
+
+
 
                 // Add diagnosis button
                 ElevatedButton(
                   onPressed: () {
+                    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DiagnosticoPage(idCita: cita.idCita),
+      ),
+    );
                     // Lógica para agregar el diagnóstico
                   },
                   child: Text('Agregar el diagnóstico'),

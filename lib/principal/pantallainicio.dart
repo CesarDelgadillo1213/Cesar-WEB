@@ -275,16 +275,16 @@ class _PantallaInicioState extends State<PantallaInicio> with SingleTickerProvid
                 ),
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.add_circle, color: Colors.blue),
-              title: Text('Agregar Doctores'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PostMedicoPage()),
-                );
-              },
-            ),
+            //ListTile(
+              //leading: Icon(Icons.add_circle, color: Colors.blue),
+              //title: Text('Agregar Doctores'),
+              //onTap: () {
+                //Navigator.push(
+                  //context,
+                  //MaterialPageRoute(builder: (context) => PostMedicoPage()),
+                //);
+             // },
+            //),
             ListTile(
               leading: Icon(Icons.list, color: Colors.green),
               title: Text('Doctores Agregados'),
