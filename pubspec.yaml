@@ -37,6 +37,8 @@ dependencies:
   multi_select_flutter: ^4.0.0
   path_provider: ^2.0.2
   fluttertoast: ^8.0.8
+  pdf: ^3.6.5
+  printing: ^5.9.2
 
   
 
