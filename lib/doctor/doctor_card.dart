@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:login_web/api_service.dart';
 import 'package:login_web/doctor/doctor.dart';
@@ -6,10 +8,19 @@ import 'package:login_web/doctor/detallesdoctor.dart';
 class DoctorCard extends StatelessWidget {
   final Doctor doctor;
 
+  static final List<String> imageUrls = [
+    'https://t4.ftcdn.net/jpg/01/34/29/31/360_F_134293169_ymHT6Lufl0i94WzyE0NNMyDkiMCH9HWx.jpg',
+    'https://www.shutterstock.com/image-illustration/male-doctor-avatar-3d-illustration-260nw-2205299083.jpg',
+    'https://www.shutterstock.com/image-illustration/male-doctor-avatar-3d-illustration-260nw-2205299083.jpg',
+    'https://st3.depositphotos.com/1432405/12513/v/450/depositphotos_125136404-stock-illustration-doctor-icon-flat-style.jpg',
+    'https://st2.depositphotos.com/4226061/9064/v/950/depositphotos_90647730-stock-illustration-female-doctor-avatar-icon.jpg',
+  ];
+
   const DoctorCard({required this.doctor});
 
   @override
   Widget build(BuildContext context) {
+    final int randomImageIndex = Random().nextInt(imageUrls.length);
     return GestureDetector(
       onTap: () {
         
@@ -38,8 +49,7 @@ class DoctorCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
-              child: Image.network(
-                'https://t3.ftcdn.net/jpg/02/48/87/00/360_F_248870078_Wuf8dA4IVf1SB8aH9Ah0HMNYOCNun479.jpg',
+              child: Image.network(imageUrls[randomImageIndex],
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,

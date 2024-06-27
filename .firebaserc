@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "flutter-web-f14a2",
+    "web": "flutter-web-f14a2"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

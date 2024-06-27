@@ -25,6 +25,9 @@ class ApiService {
         'descripcion': descripcion,
         'username': username,
         'password': password,
+        'horario_inicio': '08:00:00',
+        'horario_fin': '16:00:00',
+        'dias_trabajo': ['Lunes', 'Martes', 'Miércoles']
       });
 
       print('Enviando solicitud HTTP...');
